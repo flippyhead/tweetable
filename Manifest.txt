@@ -30,3 +30,4 @@ spec/spec_helper.rb
 spec/twitter_client_spec.rb
 spec/twitter_streaming_client_spec.rb
 spec/user_spec.rb
+tweetable.gemspec
