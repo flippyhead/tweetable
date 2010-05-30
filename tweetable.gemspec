@@ -35,6 +35,7 @@ Gem::Specification.new do |s|
      "lib/tweetable/twitter_streaming_client.rb",
      "lib/tweetable/url.rb",
      "lib/tweetable/user.rb",
+     "pkg/tweetable-0.1.7.gem",
      "script/console",
      "script/destroy",
      "script/generate",

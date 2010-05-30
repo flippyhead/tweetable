@@ -3,7 +3,7 @@ require 'rake'
 
 begin
   require 'jeweler'
-  Jeweler::Tasks.new do |gem|
+  Jeweler::Tasks.new do |gemspec|
     gemspec.name = "tweetable"
     gemspec.summary = "Track twitter messages and users in memory using Redis"
     gemspec.description = "Track twitter messages and users in memory using Redis"
@@ -15,21 +15,6 @@ begin
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
-
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gemspec|
-    gemspec.name = "tweetable"
-    gemspec.summary = "Track twitter messages and users in memory using Redis"
-    gemspec.description = "Track twitter messages and users in memory using Redis"
-    gemspec.email = "peter@flippyhead.com"
-    gemspec.homepage = "http://github.com/flippyhead/tweetable"
-    gemspec.authors = ["Peter T. Brown"]
-  end
-rescue LoadError
-  puts "Jeweler not available. Install it with: gem install jeweler"
-end
-
 
 # require 'rubygems'
 # gem 'hoe', '>= 2.1.0'

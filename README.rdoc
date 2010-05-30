@@ -12,26 +12,26 @@ To then grab recent messages, friend counts, and other profile data:
 	
 Now you have access to stuff like:
 
-	@user.friend_ids 						# [34102, 23423, 67567, etc...]
-	@user.friend_ids.size 			# 102
-	@user.profile_image_url 		# http://twitter.com/...
-	@user.messages.size 				# 202
+	@user.friend_ids # [34102, 23423, 67567, etc...]
+	@user.friend_ids.size # 102
+	@user.profile_image_url # http://twitter.com/...
+	@user.messages.size  # 202
 	
 Links in messages can be extracted and expanded:
 
 	@message = @user.messages.first
 	@message.parse_links
 
-	@link = @message.links.first	# Tweetable::Link
-	@link.url 										# http://tinyurl.com/yfuhltt
-	@link.long_url								# http://pathable.com
+	@link = @message.links.first # Tweetable::Link
+	@link.url # http://tinyurl.com/yfuhltt
+	@link.long_url # http://pathable.com
 	
 And are connected to other users who mention them:
 	
-	@message.links.size 					# 2
-	@link.count										# 8 (uses discovered so far)
-	@link.users										# [<Tweetable::User:0x1 @_attributes={}>, ...]
+	@message.links.size # 2
+	@link.count # 8 (uses discovered so far)
+	@link.users # [<Tweetable::User:0x1 @_attributes={}>, ...]
 	
 Performing a keyword search is just as easy:
 
-	@search = 
+	# @search = 
