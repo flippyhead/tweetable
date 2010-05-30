@@ -1,5 +1,7 @@
 module Tweetable
   class User < Persistable
+    MAX_MESSAGE_COUNT = 10
+    
     attribute :created_at
     attribute :updated_at    
     attribute :screen_name
@@ -33,7 +35,7 @@ module Tweetable
       update_info
       update_friend_ids
       update_follower_ids
-      self.update(:updated_at => Time.now.to_s)      
+      self.update(:updated_at => Time.now.utc.to_s)      
       
       update_messages # return newly found messages
     end
@@ -41,7 +43,7 @@ module Tweetable
     def update_info
       uid  = self.user_id.blank? ? self.screen_name : self.user_id
       info = self.client.user(uid)
-            
+
       self.user_id = info[:id]
       self.screen_name = info[:screen_name].downcase
       self.profile_image_url = info[:profile_image_url]
@@ -62,7 +64,7 @@ module Tweetable
             
     def update_messages(options = {})      
       most_recent_message = self.messages.first(:order => 'DESC', :by => :message_id) 
-      options.merge!(:count => 200, :screen_name => self.screen_name)
+      options.merge!(:count => MAX_MESSAGE_COUNT, :screen_name => self.screen_name)
       options[:since_id] = most_recent_message.message_id if most_recent_message
 
       timeline = self.client.user_timeline(options)
@@ -71,7 +73,7 @@ module Tweetable
     
     def update_friend_messages(options = {})
       most_recent_message = self.friend_messages.first(:order => 'DESC', :by => :message_id) 
-      options.merge!(:count => 200, :screen_name => self.screen_name)
+      options.merge!(:count => MAX_MESSAGE_COUNT, :screen_name => self.screen_name)
       options[:since_id] = most_recent_message.message_id if most_recent_message
 
       timeline = self.client.friends_timeline(options)      
@@ -89,11 +91,11 @@ module Tweetable
       timeline.each do |message|
         m = Message.create_from_timeline(message, options[:create_user])
         next if !m.valid?
-        collection << m.id 
-        new_messages << m
+        collection << m
+        new_messages << m      
       end
       
-      new_messages
+      new_messages # return just the newly created messages
     end
     
     def validate

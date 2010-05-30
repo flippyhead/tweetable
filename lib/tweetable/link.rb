@@ -12,10 +12,10 @@ module Tweetable
     
     # set :messages, Tweetable::Message
     set :users, Tweetable::User
-    counter :count    
+    counter :count
     
     def increment_usage_count(user)
-      return false if (user.nil? || self.users.include?(user.id))
+      return false if (user.nil? || self.users.include?(user))
       users.add(user)
       self.incr(:count)
     end

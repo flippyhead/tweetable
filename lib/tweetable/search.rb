@@ -11,8 +11,8 @@ module Tweetable
     
     def update_all(force = false)
       return unless needs_update?(force)
-      self.updated_at = Time.now.to_s
-      self.save      
+      self.updated_at = Time.now.utc.to_s
+      self.save
       update_messages
     end
     
@@ -32,16 +32,18 @@ module Tweetable
       end
       
       search_messages.each do |message|        
-        m = Message.create(
-          :message_id => message.id, 
-          :favorited => message.favorited, 
-          :photos_parsed => '0',
-          :links_parsed => '0',          
-          :created_at => Time.now.to_s, 
-          :sent_at => message.created_at,
-          :text => message.text, 
-          :from_screen_name => message.from_user) # we explicitly don't include the user_id provided by search since it's bullshit: http://code.google.com/p/twitter-api/issues/detail?id=214
+        m = Message.find_or_create(:message_id, message.id)
         
+        m.update(
+        :message_id => message.id, 
+        :favorited => message.favorited, 
+        :photos_parsed => '0',
+        :links_parsed => '0',          
+        :created_at => Time.now.utc.to_s, 
+        :sent_at => message.created_at,
+        :text => message.text, 
+        :from_screen_name => message.from_user) # we explicitly don't include the user_id provided by search since it's bullshit: http://code.google.com/p/twitter-api/issues/detail?id=214
+          
         next if !m.valid?
           
         # create the user for this message
@@ -49,9 +51,8 @@ module Tweetable
         u.update(
           :user_id => message.from_user_id,
           :profile_image_url => message.profile_image_url)
-        u
-          
-        self.messages << m.id
+
+        self.messages << m unless self.messages.include?(m)
       end
       
       search_messages.flatten

@@ -2,12 +2,16 @@ $:.unshift(File.dirname(__FILE__)) unless
   $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
 require 'logging'
+require 'twitter'
 
 module Tweetable
-  VERSION = '0.0.4'  
+  VERSION = '0.1.7'
 
   # Generic exception class.
   class TweetableError < StandardError
+  end
+
+  class TweetableAuthError < StandardError
   end
 
   # Raised when there is a temporary problem like Twitter::Unavailable

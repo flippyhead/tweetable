@@ -27,7 +27,7 @@ describe Tweetable::Collection, 'when building lists' do
 
   it "should find an existing collection" do
     Tweetable::SearchCollection.create(:name => 'some-name')
-    Tweetable::SearchCollection.find(:name, 'some-name').first.should be_instance_of Tweetable::SearchCollection
+    Tweetable::SearchCollection.find(:name => 'some-name').first.should be_instance_of Tweetable::SearchCollection
   end  
 end
 
@@ -44,8 +44,8 @@ describe Tweetable::Collection, 'when building sets' do
 
   it "should only add unique users to set" do
     collection = Tweetable::UserCollection.find_or_create(:name, 'some-name')
-    user = Tweetable::User.create(:screen_name => 'this', :created_at => Time.now.to_s)
-    user2 = Tweetable::User.create(:screen_name => 'this2', :created_at => Time.now.to_s)
+    user = Tweetable::User.create(:screen_name => 'this', :created_at => Time.now.utc.to_s)
+    user2 = Tweetable::User.create(:screen_name => 'this2', :created_at => Time.now.utc.to_s)
     collection.user_set.add(user)
     collection.user_set.add(user2)
     collection.user_set.add(user)

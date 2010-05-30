@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper.rb'
 
-attrs = {:url => 'http://someurl.com', :created_at => Time.now.to_s, :screen_name => 'somename'}
+attrs = {:url => 'http://someurl.com', :created_at => Time.now.utc.to_s, :screen_name => 'somename'}
 
 describe Tweetable::Link, 'when doing CRUD' do 
   before do 
@@ -9,7 +9,7 @@ describe Tweetable::Link, 'when doing CRUD' do
   end
   
   it "should find link by URL" do
-    link = Tweetable::Link.find(:url, attrs[:url]).first
+    link = Tweetable::Link.find(:url => attrs[:url]).first
     link.url.should == attrs[:url]
   end
 end

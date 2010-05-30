@@ -23,12 +23,13 @@ module Tweetable
     index :photos_parsed
     
     def self.create_from_timeline(message, create_user = false)
-      m = Message.create(
-        :message_id => message[:id], 
+      m = Message.find_or_create(:message_id, message[:id])
+      
+      m.update(
         :favorited => message.favorited, 
         :photos_parsed => '0',
         :links_parsed => '0',
-        :created_at => Time.now.to_s, 
+        :created_at => Time.now.utc.to_s, 
         :sent_at => message.created_at,
         :text => message.text, 
         :from_screen_name => message.user.screen_name.downcase, 
@@ -36,14 +37,24 @@ module Tweetable
             
       if create_user and m.valid?
         u = User.create_from_timeline(message.user)
-        u.messages << m.id if u.valid?
+        u.messages << m if u.valid?
       end
       m
     end
     
+    def self.create_from_status(text, client)
+      self.create_from_timeline(client.update(text), true)
+    end
+    
+    def self.purge(&block)
+      all.sort.each do |message|
+        message.delete if yield(message)
+      end
+    end
+    
     def from_user
       return nil if self.from_screen_name.nil?
-      User.find(:screen_name, self.from_screen_name.downcase).first
+      User.find(:screen_name => self.from_screen_name.downcase).first
     end
     
     def parse_links(force = false, longify = true)
@@ -51,7 +62,7 @@ module Tweetable
 
       urls = self.text.scan(Link::URL_PATTERN).flatten
       urls.each do |url|
-        link = Link.find(:url, url).first
+        link = Link.find(:url => url).first
         
         if !link
           link = Link.create(:url => url, :created_at => Time.new.to_s)

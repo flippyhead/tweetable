@@ -1,7 +1,8 @@
 # require 'yajl'
-require 'active_support'
-require 'net/http'  
-require 'cgi'  
+require 'crack'
+require 'crack/json'
+require 'net/http'
+require 'cgi'
   
 module Tweetable
   class URL  
@@ -23,9 +24,9 @@ module Tweetable
       long_url = nil
       begin
         json = http.get(url.to_s, headers).body
-        urls = ActiveSupport::JSON.decode(json)
+        urls =  Crack::JSON.parse(json)
         long_url = urls.values[0]
-      rescue  ActiveSupport::JSON::ParseError 
+      rescue Crack::ParseError
         raise TweetableError.new("Error parsing json trying to get long URL: #{json.to_s}")        
       rescue Timeout::Error => e
         raise TweetableError.new("Timeout trying to get long URL: #{e}")

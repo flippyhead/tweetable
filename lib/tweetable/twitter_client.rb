@@ -1,10 +1,9 @@
-require 'twitter'
-
 module Tweetable
   class TwitterClient
     attr_accessor :consumer_token, :consumer_secret, :authorization #:oauth_access_token, :oauth_access_secret
     
     def method_missing(sym, *args, &block)
+      raise TweetableAuthError.new('Not authorized. You must login or authorize the client.') if @client.nil?
       @client.send sym, *args, &block
     end      
     

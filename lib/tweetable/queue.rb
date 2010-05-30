@@ -83,8 +83,8 @@ module Tweetable
           message_collection = Tweetable::MessageCollection.find_or_create(:name, tag)
           user_collection = Tweetable::UserCollection.find_or_create(:name, tag)                    
 
-          message_collection.update(:updated_at => Time.now.to_s)
-          user_collection.update(:updated_at => Time.now.to_s)
+          message_collection.update(:updated_at => Time.now.utc.to_s)
+          user_collection.update(:updated_at => Time.now.utc.to_s)
 
           user_collection.user_set.add(user)
           messages.each{|m| message_collection.messages << m.id}

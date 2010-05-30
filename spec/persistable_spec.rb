@@ -4,6 +4,7 @@ attrs = {:now => Time.new.to_s, :then => 'Sat Sep 26 13:32:22 -0700 2009'}
 
 describe Tweetable::Persistable, 'when building' do 
   before do 
+    Tweetable.login('l', 'p')
     RedisSpecHelper.reset
   end
   
@@ -23,7 +24,7 @@ describe Tweetable::Persistable, 'when building' do
   end
   
   it "should find or create existing" do
-    existing = Tweetable::User.create(:screen_name => 'Flippyhead', :created_at => Time.now.to_s)
+    existing = Tweetable::User.create(:screen_name => 'Flippyhead', :created_at => Time.now.utc.to_s)
     item = Tweetable::User.find_or_create(:screen_name, 'Flippyhead')
     existing.id.to_s.should == item.id.to_s
   end  
