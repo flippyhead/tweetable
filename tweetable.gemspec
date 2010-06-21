@@ -58,6 +58,7 @@ Gem::Specification.new do |s|
      "spec/search_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb",
+     "spec/tweetable_spec.rb",
      "spec/twitter_client_spec.rb",
      "spec/twitter_streaming_client_spec.rb",
      "spec/user_spec.rb",
