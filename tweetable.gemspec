@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{tweetable}
-  s.version = "0.1.7"
+  s.version = "0.1.9"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Peter T. Brown"]
-  s.date = %q{2010-05-30}
+  s.date = %q{2010-06-21}
   s.description = %q{Track twitter messages and users in memory using Redis}
   s.email = %q{peter@flippyhead.com}
   s.extra_rdoc_files = [
@@ -76,6 +76,7 @@ Gem::Specification.new do |s|
      "spec/queue_spec.rb",
      "spec/search_spec.rb",
      "spec/spec_helper.rb",
+     "spec/tweetable_spec.rb",
      "spec/twitter_client_spec.rb",
      "spec/twitter_streaming_client_spec.rb",
      "spec/user_spec.rb"

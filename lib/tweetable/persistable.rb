@@ -2,8 +2,6 @@ require 'ohm'
 
 module Tweetable
   class Persistable < Ohm::Model
-    UPDATE_DELAY = 60*10 # 10 minutes
-    
     attribute :created_at
     attribute :updated_at
 
@@ -14,12 +12,16 @@ module Tweetable
     end
     
     def needs_update?(force = false)
-      force or self.updated_at.blank? or (Time.parse(self.updated_at) + UPDATE_DELAY) < Time.now.utc
+      force or self.updated_at.blank? or (Time.parse(self.updated_at) + self.config[:update_delay]) < Time.now.utc
     end  
 
     def client
       Tweetable.client
-    end    
+    end
+    
+    def config
+      Tweetable.config
+    end
     
     protected
     

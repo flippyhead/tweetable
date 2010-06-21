@@ -99,9 +99,9 @@ describe Tweetable::User do
   
   context 'when updating messages' do
     before do 
-      stub_get('/statuses/friends_timeline.json?screen_name=flippyhead&count=200', 'friends_timeline.json', {:login => 'l', :password => 'p'})
-      stub_get('/statuses/user_timeline.json?screen_name=flippyhead&count=200', 'user_timeline.json', {:login => 'l', :password => 'p'})
-      stub_get('/statuses/user_timeline.json?screen_name=flippyhead&count=200&since_id=11572672967', 'blank.json', {:login => 'l', :password => 'p'})
+      stub_get('/1/statuses/friends_timeline.json?screen_name=flippyhead&count=10', 'friends_timeline.json', {:login => 'l', :password => 'p'})
+      stub_get('/1/statuses/user_timeline.json?screen_name=flippyhead&count=10', 'user_timeline.json', {:login => 'l', :password => 'p'})
+      stub_get('/1/statuses/user_timeline.json?screen_name=flippyhead&count=10&since_id=11572672967', 'blank.json', {:login => 'l', :password => 'p'})
     end
     
     it "should return new messages" do    
@@ -120,6 +120,11 @@ describe Tweetable::User do
     end
     
     it "should only get created since last message" do 
+      @user.update_messages.size.should > 0
+      @user.update_messages.size.should == 0    
+    end
+
+    it "should not duplicate messages" do 
       @user.update_messages.size.should > 0
       @user.update_messages.size.should == 0    
     end

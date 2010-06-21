@@ -94,6 +94,21 @@ module Tweetable
       assert_format :photos_parsed, /^[0,1]$/
     end
     
+    def hash
+      self.id.hash
+    end
+
+    # Simply delegate to == in this example.
+    def eql?(comparee)
+      self == comparee
+    end
+
+    # Objects are equal if they have the same
+    # unique custom identifier.
+    def ==(comparee)
+      self.id == comparee.id
+    end
+    
     # It seems that, at least using streaming, message id's are not sequential anymore 
     # So comparisons are done on the official sent_at date/time
     def <=>(o)

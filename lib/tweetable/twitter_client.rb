@@ -8,6 +8,8 @@ module Tweetable
     end      
     
     def authorize(token, secret, authorization)
+      raise TweetableAuthError if authorization.nil?
+      
       self.authorization = authorization
       self.consumer_token = token
       self.consumer_secret = secret      

@@ -1,7 +1,5 @@
 module Tweetable
   class User < Persistable
-    MAX_MESSAGE_COUNT = 10
-    
     attribute :created_at
     attribute :updated_at    
     attribute :screen_name
@@ -32,12 +30,12 @@ module Tweetable
     
     def update_all(force = false)
       return unless needs_update?(force)
-      update_info
-      update_friend_ids
-      update_follower_ids
-      self.update(:updated_at => Time.now.utc.to_s)      
-      
-      update_messages # return newly found messages
+      update_info if self.config[:include_on_update].include?(:info)
+      update_friend_ids if self.config[:include_on_update].include?(:friend_ids)
+      update_follower_ids if self.config[:include_on_update].include?(:follower_ids)
+      update_friend_messages if self.config[:include_on_update].include?(:friend_messages)
+      self.update(:updated_at => Time.now.utc.to_s)            
+      self.config[:include_on_update].include?(:messages) ? update_messages : []  # return newly found messages
     end
   
     def update_info
@@ -64,7 +62,7 @@ module Tweetable
             
     def update_messages(options = {})      
       most_recent_message = self.messages.first(:order => 'DESC', :by => :message_id) 
-      options.merge!(:count => MAX_MESSAGE_COUNT, :screen_name => self.screen_name)
+      options.merge!(:count => self.config[:max_message_count], :screen_name => self.screen_name)
       options[:since_id] = most_recent_message.message_id if most_recent_message
 
       timeline = self.client.user_timeline(options)
@@ -73,7 +71,7 @@ module Tweetable
     
     def update_friend_messages(options = {})
       most_recent_message = self.friend_messages.first(:order => 'DESC', :by => :message_id) 
-      options.merge!(:count => MAX_MESSAGE_COUNT, :screen_name => self.screen_name)
+      options.merge!(:count => self.config[:max_message_count], :screen_name => self.screen_name)
       options[:since_id] = most_recent_message.message_id if most_recent_message
 
       timeline = self.client.friends_timeline(options)      

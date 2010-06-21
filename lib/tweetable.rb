@@ -5,7 +5,11 @@ require 'logging'
 require 'twitter'
 
 module Tweetable
-  VERSION = '0.1.7'
+  DEFAULT_CONFIG = {
+    :max_message_count => 10, 
+    :include_on_update => [:info, :friend_ids, :follower_ids, :messages], # skipping :friend_messages
+    :update_delay => 60*10
+  }
 
   # Generic exception class.
   class TweetableError < StandardError
@@ -57,6 +61,12 @@ module Tweetable
   def options
     @options
   end
+  
+  def config(config = nil)
+    @config ||= DEFAULT_CONFIG
+    @config.merge!(config) unless config.nil?
+    @config
+  end
 
   def credentials
     @credentials
@@ -68,5 +78,5 @@ module Tweetable
     @log
   end
 
-  module_function :client, :options, :authorize, :login, :credentials, :log
+  module_function :client, :options, :authorize, :login, :credentials, :log, :config
 end

@@ -24,6 +24,11 @@ describe Tweetable::Message do
     it "shuould find from_user" do
       @message.from_user.should == @user
     end
+    
+    it "should consider two objects with same id ==" do
+      copy = @message.dup
+      (copy == @message).should be_true
+    end
   end
   
   context "when purging" do
