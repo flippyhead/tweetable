@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'bundler'
 require 'rake'
 
 begin
@@ -10,6 +11,7 @@ begin
     gemspec.email = "peter@flippyhead.com"
     gemspec.homepage = "http://github.com/flippyhead/tweetable"
     gemspec.authors = ["Peter T. Brown"]
+    gemspec.add_bundler_dependencies
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
