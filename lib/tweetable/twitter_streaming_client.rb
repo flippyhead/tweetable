@@ -43,7 +43,7 @@ module Tweetable
         
         search = Search.find_or_create(:query, keyword.downcase)
         search.update(:updated_at => Time.now.utc.to_s)
-        search.messages << message
+        search.messages << message unless search.messages.include?(message)
       end
       
       message
