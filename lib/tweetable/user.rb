@@ -30,16 +30,19 @@ module Tweetable
     
     def update_all(force = false)
       return unless needs_update?(force)
-      update_info if self.config[:include_on_update].include?(:info)
+      
+      update_info if self.config[:include_on_update].include?(:info)      
       update_friend_ids if self.config[:include_on_update].include?(:friend_ids)
       update_follower_ids if self.config[:include_on_update].include?(:follower_ids)
       update_friend_messages if self.config[:include_on_update].include?(:friend_messages)
+      
       self.update(:updated_at => Time.now.utc.to_s)            
+      
       self.config[:include_on_update].include?(:messages) ? update_messages : []  # return newly found messages
     end
   
     def update_info
-      uid  = self.user_id.blank? ? self.screen_name : self.user_id
+      uid  = self.screen_name # self.user_id.blank? ? self.screen_name : self.user_id
       info = self.client.user(uid)
 
       self.user_id = info[:id]
