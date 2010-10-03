@@ -16,7 +16,7 @@ module Tweetable
     
     set :links, Link
     set :photos, Photo
-    set :tags
+    set :tags, String
     
     index :message_id
     index :links_parsed

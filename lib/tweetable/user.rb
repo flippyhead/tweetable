@@ -14,9 +14,9 @@ module Tweetable
     list :messages, Message
     list :friend_messages, Message
     
-    set :friend_ids
-    set :follower_ids
-    set :tags
+    set :friend_ids, Integer
+    set :follower_ids, Integer
+    set :tags, String
     
     def self.create_from_timeline(user)
       u = User.find_or_create(:screen_name, user.screen_name.downcase)
@@ -64,7 +64,7 @@ module Tweetable
     end
             
     def update_messages(options = {})      
-      most_recent_message = self.messages.first(:order => 'DESC', :by => :message_id) 
+      most_recent_message = self.messages.sort(:order => 'DESC', :by => :message_id).first
       options.merge!(:count => self.config[:max_message_count], :screen_name => self.screen_name)
       options[:since_id] = most_recent_message.message_id if most_recent_message
 
@@ -73,7 +73,7 @@ module Tweetable
     end
     
     def update_friend_messages(options = {})
-      most_recent_message = self.friend_messages.first(:order => 'DESC', :by => :message_id) 
+      most_recent_message = self.friend_messages.sort(:order => 'DESC', :by => :message_id).first
       options.merge!(:count => self.config[:max_message_count], :screen_name => self.screen_name)
       options[:since_id] = most_recent_message.message_id if most_recent_message
 
