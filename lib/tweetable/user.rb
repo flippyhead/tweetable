@@ -14,9 +14,9 @@ module Tweetable
     list :messages, Message
     list :friend_messages, Message
     
-    set :friend_ids, Integer
-    set :follower_ids, Integer
-    set :tags, String
+    set :friend_ids
+    set :follower_ids
+    set :tags
     
     def self.create_from_timeline(user)
       u = User.find_or_create(:screen_name, user.screen_name.downcase)
