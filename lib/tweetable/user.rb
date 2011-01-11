@@ -42,7 +42,7 @@ module Tweetable
     end
   
     def update_info
-      uid  = self.screen_name # self.user_id.blank? ? self.screen_name : self.user_id
+      uid  = self.user_id.blank? ? self.screen_name : self.user_id
       info = self.client.user(uid)
 
       self.user_id = info[:id]
@@ -69,11 +69,24 @@ module Tweetable
       options[:since_id] = most_recent_message.message_id if most_recent_message
 
       timeline = self.client.user_timeline(options)
+
+      puts "**** #{options.inspect}"
+      puts "********************************************************************************************************"
+      puts "**** #{most_recent_message.inspect}"
+      puts "********************************************************************************************************"
+      puts "**** #{timeline[0].inspect}"
+      puts "********************************************************************************************************"
+      puts "**** #{timeline[-1].inspect}"
+      puts "********************************************************************************************************"
+      puts "**** #{timeline.size}"
+
+      # puts "**** #{timeline.inspect}"
+      
       build_messages(timeline, self.messages)
     end
     
     def update_friend_messages(options = {})
-      most_recent_message = self.friend_messages.sort(:order => 'DESC', :by => :message_id).first
+      most_recent_message = self.friend_messages.sort(:order => 'DESC', :by => :message_id, :limit => 1).first
       options.merge!(:count => self.config[:max_message_count], :screen_name => self.screen_name)
       options[:since_id] = most_recent_message.message_id if most_recent_message
 

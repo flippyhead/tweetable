@@ -13,7 +13,7 @@ module Tweetable
     
     def needs_update?(force = false)
       force or self.updated_at.blank? or (Time.parse(self.updated_at) + self.config[:update_delay]) < Time.now.utc
-    end  
+    end
 
     def client
       Tweetable.client

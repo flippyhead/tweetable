@@ -1,8 +1,7 @@
 source :gemcutter
 gem 'logging'
-gem 'twitter'
-
+gem 'twitter', '0.9.12'
 
 group :development do
-	gem 'rspec'
+	gem 'rspec', '2.1.0'
 end

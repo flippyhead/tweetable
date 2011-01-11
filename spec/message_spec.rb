@@ -139,9 +139,13 @@ describe Tweetable::Message do
   end
   
   context 'when posting status updates' do
+    # def self.create_from_status(text, client)
+    #   self.create_from_timeline(client.update(text), true)
+    # end
+    
     it "should return new messages" do    
-      # Tweetable::Message.should_receive(:create_from_timeline).once
-      # Tweetable::Message.create_from_status('a status update')
+      Tweetable::Message.should_receive(:create_from_timeline).once
+      Tweetable::Message.create_from_status('a status update')
     end    
   end
 end
